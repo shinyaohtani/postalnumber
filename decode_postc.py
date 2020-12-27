@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # coding: utf_8
 import os
+import sys
 import csv, sqlite3
 import unicodedata
 from postal_code import PostalCode as ps
 
 
 def main():
-    ps.add_fulladdr(incomplete_csv="./郵便番号のみの住所.csv", output_csv="./郵便番号と住所.csv")
+    args = sys.argv[1:]
+    for csv in args:
+        ps.add_fulladdr(incomplete_csv=csv, output_csv="住所付き_" + csv)
 
 
 if __name__ == "__main__":

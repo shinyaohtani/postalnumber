@@ -78,7 +78,7 @@ class PostalCode:
             incomplete_csv, "r", encoding="utf_8_sig", errors="", newline=""
         ) as fp:
             # CSVを読み込む
-            with open(output_csv, "w") as csvoutput:
+            with open(output_csv, "w", encoding="utf_8_sig") as csvoutput:
                 reader = csv.DictReader(
                     fp,
                     delimiter=",",
