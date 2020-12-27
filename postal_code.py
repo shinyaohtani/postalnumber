@@ -3,6 +3,7 @@
 import os
 import csv, sqlite3
 import unicodedata
+import pdb
 
 # 0 全国地方公共団体コード
 # 1 旧郵便番号
@@ -60,6 +61,54 @@ class PostalCode:
         # データベースを閉じる --- (*4)
         c.execute("commit")
         conn.close()
+
+    def add_fulladdr(
+        incomplete_csv="./incomplete.csv",
+        postalcode_sqlite3="./postalcode.sqlite3",
+        output_csv="./output.csv",
+    ):
+        if not os.path.isfile(postalcode_sqlite3):
+            return False
+
+        # SQLite3のデータベースを開く
+        conn = sqlite3.connect(postalcode_sqlite3)
+        c = conn.cursor()
+        # CSVファイルを開く
+        with open(
+            incomplete_csv, "r", encoding="utf_8_sig", errors="", newline=""
+        ) as fp:
+            # CSVを読み込む
+            with open(output_csv, "w") as csvoutput:
+                reader = csv.DictReader(
+                    fp,
+                    delimiter=",",
+                    quotechar='"',
+                    doublequote=True,
+                    skipinitialspace=True,
+                )
+                fn = reader.fieldnames.copy()
+                fn.remove("postc")
+                fn = ["postc", "pref", "city", "addr"] + fn
+                writer = csv.DictWriter(csvoutput, fieldnames=fn)
+                writer.writeheader()
+                # 一行ずつ処理する
+                for i, row in enumerate(reader):
+                    row["pref"], row["city"], row["addr"] = PostalCode.get_detail(
+                        c, row["postc"]
+                    )
+                    writer.writerow(row)
+
+        conn.close()
+
+    def get_detail(cursor, postc):
+        return ("aaa", "bbb", "ccc")
+        cursor.execute("begin")
+        cursor.execute(
+            """INSERT INTO zip (postc,pref,prefr,city,cityr,addr,addrr)
+        VALUES(?,?,?,?,?,?,?)""",
+            (postc, pref, prefr, city, cityr, addr, addrr),
+        )
+        cursor.execute("commit")
 
 
 def main():
