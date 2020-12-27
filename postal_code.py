@@ -87,34 +87,23 @@ class PostalCode:
                         skipinitialspace=True,
                     )
                     fn = reader.fieldnames.copy()
-                    if fn.count("postc"):
-                        fn.remove("postc")
-                    if fn.count("pref"):
-                        fn.remove("pref")
-                    if fn.count("city"):
-                        fn.remove("city")
-                    if fn.count("addr1"):
-                        fn.remove("addr1")
-                    if fn.count("addr2"):
-                        fn.remove("addr2")
-                    if fn.count("addr3"):
-                        fn.remove("addr3")
-                    if fn.count("addr4"):
-                        fn.remove("addr4")
-                    fn = [
+                    colmns = [
                         "postc",
-                        "pref",
-                        "city",
-                        "addr1",
-                        "addr2",
-                        "addr3",
-                        "addr4",
-                    ] + fn
+                        "都道府県",
+                        "市区町村",
+                        "町域",
+                        "番地",
+                        "建物名等",
+                    ]
+                    for cn in colmns:
+                        if fn.count(cn):
+                            fn.remove(cn)
+                    fn = colmns + fn
                     writer = csv.DictWriter(csvoutput, fieldnames=fn)
                     writer.writeheader()
                     # 一行ずつ処理する
                     for i, row in enumerate(reader):
-                        row["pref"], row["city"], row["addr"] = PostalCode.get_detail(
+                        row["都道府県"], row["市区町村"], row["町域"] = PostalCode.get_detail(
                             c, row["postc"]
                         )
                         writer.writerow(row)
@@ -123,6 +112,7 @@ class PostalCode:
         cursor.execute(f"SELECT * from zip where postc is {postc}")
         hit = cursor.fetchone()
         if hit is None:
+            print(f"Code: {postc} is invalid code!!")
             return ("郵便番号が正しくありません", "郵便番号が正しくありません", "郵便番号が正しくありません")
         return (hit[1], hit[3], hit[5])
 
