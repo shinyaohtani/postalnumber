@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding: utf_8
 import csv, sqlite3
 import unicodedata
 
@@ -49,9 +51,17 @@ class InsertToSQLite3:
                 # SQLiteに追加 --- (*3)
                 c.execute(
                     """INSERT INTO zip (postc,pref,prefr,city,cityr,addr,addrr)
-                VALUES(?,?,?,?)""",
+                VALUES(?,?,?,?,?,?,?)""",
                     (postc, pref, prefr, city, cityr, addr, addrr),
                 )
         # データベースを閉じる --- (*4)
         c.execute("commit")
         conn.close()
+
+
+def main():
+    InsertToSQLite3.make_db()
+
+
+if __name__ == "__main__":
+    main()
