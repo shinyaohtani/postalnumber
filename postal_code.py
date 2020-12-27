@@ -88,6 +88,9 @@ class PostalCode:
                     )
                     fn = reader.fieldnames.copy()
                     fn.remove("postc")
+                    fn.remove("pref")
+                    fn.remove("city")
+                    fn.remove("addr")
                     fn = ["postc", "pref", "city", "addr"] + fn
                     writer = csv.DictWriter(csvoutput, fieldnames=fn)
                     writer.writeheader()
