@@ -87,11 +87,19 @@ class PostalCode:
                         skipinitialspace=True,
                     )
                     fn = reader.fieldnames.copy()
-                    fn.remove("postc")
-                    fn.remove("pref")
-                    fn.remove("city")
-                    fn.remove("addr")
-                    fn = ["postc", "pref", "city", "addr"] + fn
+                    if fn.count("postc"):
+                        fn.remove("postc")
+                    if fn.const("pref"):
+                        fn.remove("pref")
+                    if fn.const("city"):
+                        fn.remove("city")
+                    if fn.const("addr"):
+                        fn.remove("addr")
+                    if fn.const("detail1"):
+                        fn.remove("detail1")
+                    if fn.const("detail2"):
+                        fn.remove("detail2")
+                    fn = ["postc", "pref", "city", "addr", "detail1", "detail2"] + fn
                     writer = csv.DictWriter(csvoutput, fieldnames=fn)
                     writer.writeheader()
                     # 一行ずつ処理する
