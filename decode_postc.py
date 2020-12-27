@@ -10,7 +10,7 @@ from postal_code import PostalCode as ps
 def main():
     args = sys.argv[1:]
     for csv in args:
-        ps.add_fulladdr(incomplete_csv=csv, output_csv="住所付き_" + csv)
+        ps.add_fulladdr(incomplete_csv=csv, output_csv="addr_" + csv)
 
 
 if __name__ == "__main__":
