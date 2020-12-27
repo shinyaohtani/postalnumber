@@ -71,34 +71,32 @@ class PostalCode:
             return False
 
         # SQLite3のデータベースを開く
-        conn = sqlite3.connect(postalcode_sqlite3)
-        c = conn.cursor()
-        # CSVファイルを開く
-        with open(
-            incomplete_csv, "r", encoding="utf_8_sig", errors="", newline=""
-        ) as fp:
-            # CSVを読み込む
-            with open(output_csv, "w", encoding="utf_8_sig") as csvoutput:
-                reader = csv.DictReader(
-                    fp,
-                    delimiter=",",
-                    quotechar='"',
-                    doublequote=True,
-                    skipinitialspace=True,
-                )
-                fn = reader.fieldnames.copy()
-                fn.remove("postc")
-                fn = ["postc", "pref", "city", "addr"] + fn
-                writer = csv.DictWriter(csvoutput, fieldnames=fn)
-                writer.writeheader()
-                # 一行ずつ処理する
-                for i, row in enumerate(reader):
-                    row["pref"], row["city"], row["addr"] = PostalCode.get_detail(
-                        c, row["postc"]
+        with sqlite3.connect(postalcode_sqlite3) as conn:
+            c = conn.cursor()
+            # CSVファイルを開く
+            with open(
+                incomplete_csv, "r", encoding="utf_8_sig", errors="", newline=""
+            ) as fp:
+                # CSVを読み込む
+                with open(output_csv, "w", encoding="utf_8_sig") as csvoutput:
+                    reader = csv.DictReader(
+                        fp,
+                        delimiter=",",
+                        quotechar='"',
+                        doublequote=True,
+                        skipinitialspace=True,
                     )
-                    writer.writerow(row)
-
-        conn.close()
+                    fn = reader.fieldnames.copy()
+                    fn.remove("postc")
+                    fn = ["postc", "pref", "city", "addr"] + fn
+                    writer = csv.DictWriter(csvoutput, fieldnames=fn)
+                    writer.writeheader()
+                    # 一行ずつ処理する
+                    for i, row in enumerate(reader):
+                        row["pref"], row["city"], row["addr"] = PostalCode.get_detail(
+                            c, row["postc"]
+                        )
+                        writer.writerow(row)
 
     def get_detail(cursor, postc):
         cursor.execute(f"SELECT * from zip where postc is {postc}")
