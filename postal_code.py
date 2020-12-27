@@ -21,7 +21,7 @@ import unicodedata
 # 14 変更理由(「0」は変更なし、「1」市政・区政・町政・分区・政令指定都市施行、「2」住居表示の実施、「3」区画整理、「4」郵便区調整等、「5」訂正、「6」廃止(廃止データのみ使用))
 
 
-class InsertToSQLite3:
+class PostalCode:
     def make_db(
         ken_all_csv="./assets/KEN_ALL.CSV", postalcode_sqlite3="./postalcode.sqlite3"
     ):
@@ -63,7 +63,7 @@ class InsertToSQLite3:
 
 
 def main():
-    InsertToSQLite3.make_db()
+    PostalCode.make_db()
 
 
 if __name__ == "__main__":
