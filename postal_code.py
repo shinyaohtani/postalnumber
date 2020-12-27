@@ -99,7 +99,9 @@ class PostalCode:
                         fn.remove("detail1")
                     if fn.count("detail2"):
                         fn.remove("detail2")
-                    fn = ["postc", "pref", "city", "addr", "detail1", "detail2"] + fn
+                    if fn.count("detail3"):
+                        fn.remove("detail3")
+                    fn = ["postc", "pref", "city", "addr", "detail1", "detail2", "detail3"] + fn
                     writer = csv.DictWriter(csvoutput, fieldnames=fn)
                     writer.writeheader()
                     # 一行ずつ処理する
