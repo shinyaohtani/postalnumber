@@ -1,5 +1,7 @@
 #!/bin/sh
 BASEDIR="."
+brew bundle --quiet --file $BASEDIR/Brewfile
 pip -q install -r $BASEDIR/requirements.txt
 curl -s "https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip" > $BASEDIR/assets/ken_all.zip
 (cd $BASEDIR/assets && unzip -qo ./ken_all.zip)
+(cd $BASEDIR && ./insert_to_sqlite3.py)
