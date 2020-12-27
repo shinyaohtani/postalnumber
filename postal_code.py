@@ -93,15 +93,23 @@ class PostalCode:
                         fn.remove("pref")
                     if fn.count("city"):
                         fn.remove("city")
-                    if fn.count("addr"):
-                        fn.remove("addr")
-                    if fn.count("detail1"):
-                        fn.remove("detail1")
-                    if fn.count("detail2"):
-                        fn.remove("detail2")
-                    if fn.count("detail3"):
-                        fn.remove("detail3")
-                    fn = ["postc", "pref", "city", "addr", "detail1", "detail2", "detail3"] + fn
+                    if fn.count("addr1"):
+                        fn.remove("addr1")
+                    if fn.count("addr2"):
+                        fn.remove("addr2")
+                    if fn.count("addr3"):
+                        fn.remove("addr3")
+                    if fn.count("addr4"):
+                        fn.remove("addr4")
+                    fn = [
+                        "postc",
+                        "pref",
+                        "city",
+                        "addr1",
+                        "addr2",
+                        "addr3",
+                        "addr4",
+                    ] + fn
                     writer = csv.DictWriter(csvoutput, fieldnames=fn)
                     writer.writeheader()
                     # 一行ずつ処理する
@@ -114,6 +122,8 @@ class PostalCode:
     def get_detail(cursor, postc):
         cursor.execute(f"SELECT * from zip where postc is {postc}")
         hit = cursor.fetchone()
+        if hit is None:
+            return ("郵便番号が正しくありません", "郵便番号が正しくありません", "郵便番号が正しくありません")
         return (hit[1], hit[3], hit[5])
 
 
