@@ -1,4 +1,5 @@
 import csv, sqlite3
+import unicodedata
 
 # 0 全国地方公共団体コード
 # 1 旧郵便番号
@@ -26,7 +27,7 @@ class InsertToSQLite3:
         # テーブルを作る --- (*2)
         c.execute(
             """CREATE TABLE zip (
-            zipno text, ken text, shi text, cho text)"""
+            postc text, pref text, prefr text, city text, cityr text, addr text, addrr text)"""
         )
         c.execute("begin")
         # CSVファイルを開く
@@ -35,20 +36,20 @@ class InsertToSQLite3:
             reader = csv.reader(fp)
             # 一行ずつ処理する
             for row in reader:
-postc = row[2 ] # 郵便番号
-prefr = row[3 ] # 都道府県名(読み)
-cityr = row[4 ] # 市区町村名(読み)
-addrr = row[5 ] # 町域名(読み)
-pref = row[6 ] # 都道府県名
-city = row[7 ] # 市区町村名
-addr = row[8 ] # 町域名
-                if cho == "以下に掲載がない場合":
-                    cho = ""
+                postc = row[2 ] # 郵便番号
+                prefr = unicodedata.normalize('NFKC', row[3 ]) # 都道府県名(読み),
+                cityr = unicodedata.normalize('NFKC', row[4 ]) # 市区町村名(読み),
+                addrr = unicodedata.normalize('NFKC', row[5 ]) # 町域名(読み),
+                pref = row[6 ] # 都道府県名
+                city = row[7 ] # 市区町村名
+                addr = row[8 ] # 町域名
+                if addr == "以下に掲載がない場合":
+                    addr = ""
                 # SQLiteに追加 --- (*3)
                 c.execute(
-                    """INSERT INTO zip (zipno,ken,shi,cho)
+                    """INSERT INTO zip (postc,pref,prefr,city,cityr,addr,addrr)
                 VALUES(?,?,?,?)""",
-                    (zipno, ken, shi, cho),
+                    (postc, pref, prefr, city, cityr, addr, addrr),
                 )
         # データベースを閉じる --- (*4)
         c.execute("commit")
