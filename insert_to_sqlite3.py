@@ -25,7 +25,7 @@ class InsertToSQLite3:
     def make_db(
         ken_all_csv="./assets/KEN_ALL.CSV", postalcode_sqlite3="./postalcode.sqlite3"
     ):
-        if (os.path.isfile(postalcode_sqlite3)):
+        if os.path.isfile(postalcode_sqlite3):
             os.remove(postalcode_sqlite3)
         # SQLite3のデータベースを開く --- (*1)
         conn = sqlite3.connect(postalcode_sqlite3)
