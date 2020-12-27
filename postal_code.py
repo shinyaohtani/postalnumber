@@ -101,14 +101,9 @@ class PostalCode:
         conn.close()
 
     def get_detail(cursor, postc):
-        return ("aaa", "bbb", "ccc")
-        cursor.execute("begin")
-        cursor.execute(
-            """INSERT INTO zip (postc,pref,prefr,city,cityr,addr,addrr)
-        VALUES(?,?,?,?,?,?,?)""",
-            (postc, pref, prefr, city, cityr, addr, addrr),
-        )
-        cursor.execute("commit")
+        cursor.execute(f"SELECT * from zip where postc is {postc}")
+        hit = cursor.fetchone()
+        return (hit[1], hit[3], hit[5])
 
 
 def main():
