@@ -89,15 +89,15 @@ class PostalCode:
                     fn = reader.fieldnames.copy()
                     if fn.count("postc"):
                         fn.remove("postc")
-                    if fn.const("pref"):
+                    if fn.count("pref"):
                         fn.remove("pref")
-                    if fn.const("city"):
+                    if fn.count("city"):
                         fn.remove("city")
-                    if fn.const("addr"):
+                    if fn.count("addr"):
                         fn.remove("addr")
-                    if fn.const("detail1"):
+                    if fn.count("detail1"):
                         fn.remove("detail1")
-                    if fn.const("detail2"):
+                    if fn.count("detail2"):
                         fn.remove("detail2")
                     fn = ["postc", "pref", "city", "addr", "detail1", "detail2"] + fn
                     writer = csv.DictWriter(csvoutput, fieldnames=fn)
